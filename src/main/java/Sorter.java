@@ -72,8 +72,9 @@ public class Sorter {
         T[] lArray = (T[]) new Comparable[lLength];
         T[] rArray = (T[]) new Comparable[rLength];
         // Initialize the temporary arrays with values from original array
-        for (int i = 0; i < lLength; i++)
+        for (int i = 0; i < lLength; i++) {
             lArray[i] = array[l + i];
+        }
         for (int j = 0; j < rLength; j++)
             rArray[j] = array[m + 1 + j];
 
@@ -110,15 +111,57 @@ public class Sorter {
 
     //region RadixSort
     public static void radixSort(Long[] array, int bitsPerDigit) {
+
+        Long maxDigit = 0L;
+        // Finds biggest number
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] > maxDigit) {
+                maxDigit = array[i];
+            }
+        }
+
+        // Calculates maximum length of an element
+        int digits = maxDigit.toString().length();
+        // Sorts
+        for (int i = 0; i <= digits; i++) {
+            countingSort(array, bitsPerDigit, i);
+        }
+
     }
 
     // Stable counting sort
     private static void countingSort(Long[] arr, int bitsPerDigit, int digitIndex) {
+        Long[] sortedArray = new Long[arr.length];
+        int countSize = (1 << bitsPerDigit);
+        int[] countArray = new int[countSize];
+
+        // Set up countArray
+        for (int i = 0; i < arr.length; i++) {
+            countArray[extractDigit(arr[i], bitsPerDigit, digitIndex)]++;
+        }
+
+        // Cumulative count
+        for (int i = 1; i < countSize; i++) {
+            countArray[i] += countArray[i - 1];
+        }
+
+        // Create a temporary array that's sorted according to the current digit
+        for (int i = arr.length - 1; i >= 0; i--) {
+            int digit = extractDigit(arr[i], bitsPerDigit, digitIndex);
+            sortedArray[countArray[digit] - 1] = arr[i];
+            countArray[digit]--;
+        }
+        // Copy sorted array into the original array
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = sortedArray[i];
+        }
 
     }
 
     private static int extractDigit(Long key, int bitsPerDigit, int digitIndex) {
-        return 0;
+        int bitMask = (1 << bitsPerDigit) - 1;
+        int shiftedKey = (int) (key >> (digitIndex*bitsPerDigit));
+        return (int) (shiftedKey & bitMask);
     }
     //endregion
 }
