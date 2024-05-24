@@ -46,6 +46,8 @@ public class Sorter {
 
     //region MergeSort
     public static <T extends Comparable<T>> void mergeSortNoRecursion(T[] array) {
+        if (array == null || array.length < 2) return;
+
         int n = array.length;
         int size, leftStart;
 
@@ -108,7 +110,6 @@ public class Sorter {
 
     //region RadixSort
     public static void radixSort(Long[] array, int bitsPerDigit) {
-
     }
 
     // Stable counting sort
