@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Sorter {
+public class Sorter{
     //region QuickSort
     // Envelope method for the recursive quickSort method
     public static <T extends Comparable<T>> void quickSort(T[] array) {
@@ -27,7 +27,7 @@ public class Sorter {
 
         int i = l - 1;
         for (int j = l; j < r; j++) {
-            if (array[j].compareTo(pivot) <= 0) {
+            if (array[j].compareTo(pivot) < 0) {
                 i++;
                 swap(array, i, j);
             }
@@ -111,26 +111,31 @@ public class Sorter {
 
     //region RadixSort
     public static void radixSort(Long[] array, int bitsPerDigit) {
-
-        Long maxDigit = 0L;
+        Long maxDigits = 0L;
         // Finds biggest number
         for (int i = 0; i < array.length; i++) {
-            if (array[i] > maxDigit) {
-                maxDigit = array[i];
+            if (array[i] > maxDigits) {
+                maxDigits = array[i];
             }
         }
 
         // Calculates maximum length of an element
-        int digits = maxDigit.toString().length();
+        int length = Long.toBinaryString(maxDigits).length();
+        int parts = (length/bitsPerDigit) + 1;
         // Sorts
-        for (int i = 0; i <= digits; i++) {
+        for (int i = 0; i < parts; i++) {
             countingSort(array, bitsPerDigit, i);
         }
 
     }
 
+    private static int extractDigit(Long key, int bitsPerDigit, int digitIndex) {
+        int bitMask = (1 << bitsPerDigit) - 1;
+        return (int) (key >> ( bitsPerDigit * digitIndex) & bitMask);
+    }
+
     // Stable counting sort
-    private static void countingSort(Long[] arr, int bitsPerDigit, int digitIndex) {
+    static void countingSort(Long[] arr, int bitsPerDigit, int digitIndex) {
         Long[] sortedArray = new Long[arr.length];
         int countSize = (1 << bitsPerDigit);
         int[] countArray = new int[countSize];
@@ -156,12 +161,6 @@ public class Sorter {
             arr[i] = sortedArray[i];
         }
 
-    }
-
-    private static int extractDigit(Long key, int bitsPerDigit, int digitIndex) {
-        int bitMask = (1 << bitsPerDigit) - 1;
-        int shiftedKey = (int) (key >> (digitIndex*bitsPerDigit));
-        return (int) (shiftedKey & bitMask);
     }
     //endregion
 }
