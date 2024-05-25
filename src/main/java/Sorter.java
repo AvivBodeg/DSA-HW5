@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class Sorter{
@@ -10,16 +11,17 @@ public class Sorter{
 
     // Recursively sort the array using the quickSort algorithm
     private static <T extends Comparable<T>> void quickSort(T[] array, int l, int r) {
-        if (l < r) {
+        if (l < r - 2) {
             int p = partition(array, l, r);
             if (l != p) quickSort(array, l, p - 1);
             if (r != p) quickSort(array, p + 1, r);
+        } else {
+            bubbleSort(array, l, r);
         }
     }
-
+    static Random random = new Random();
     private static <T extends Comparable<T>> int partition(T[] array, int l, int r) {
         // Generates random pivot index
-        Random random = new Random();
         int pivotIndex = random.nextInt(r - l + 1) + l;
         // Moves Chosen element to the r of the partition and sets it as the pivot
         swap(array, pivotIndex, r);
@@ -41,6 +43,27 @@ public class Sorter{
         T temp = array[j];
         array[j] = array[i];
         array[i] = temp;
+    }
+
+    static <T extends Comparable<T>> void bubbleSort(T[] arr, int l, int r)
+    {
+        boolean swapped;
+        for (int i = l; i <= r; i++) {
+            swapped = false;
+            for (int j = l; j <= r - 1 - (i - l); j++) {
+                if (arr[j].compareTo(arr[j + 1]) > 0) {
+
+                    // Swap arr[j] and arr[j+1]
+                    swap(arr, j, j+1);
+                    swapped = true;
+                }
+            }
+
+            // If no two elements were
+            // swapped by inner loop, then break
+            if (!swapped)
+                break;
+        }
     }
     //endregion
 
