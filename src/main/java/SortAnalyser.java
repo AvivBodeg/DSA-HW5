@@ -155,7 +155,7 @@ public class SortAnalyser {
     private static void performExperiment(Experiment.Parameters params, File outputPath) throws IOException {
         Supplier<Stream<Long[]>> numberArraysStream = streamOfArrays(params);
         ResultPlotter plotter = new ResultPlotter();
-        List<Integer> digitWidths = List.of(1, 4, 8, 16, 24);
+        List<Integer> digitWidths = List.of(1, 4, 8, 16, 20);
 
         Map<String, Consumer<Long[]>> sorters = new HashMap<>(Map.of("quicksort", Sorter::quickSort, "mergesort", Sorter::mergeSortNoRecursion));
 
